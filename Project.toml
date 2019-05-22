@@ -7,9 +7,9 @@ version = "0.1.0"
 JuMP = "4076af6c-e467-56ae-b986-b466b2749572"
 
 [extras]
-SCIP = "82193955-e24f-5292-bf16-6f2c5261a85f"
 Clp = "e2554f3b-3117-50c0-817c-e040a3ddf72d"
+Cbc = "9961bab8-2fa3-5c5a-9d89-47fab24efd76"
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 
 [targets]
-test = ["Clp", "SCIP", "Test"]
+test = ["Clp", "Cbc", "Test"]
