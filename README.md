@@ -15,7 +15,7 @@ A good start with this package is the corresponding [blog post](https://matbesan
 ```
 min f(y) + <c, x>
 s.t.
-G(x) ∈ S
+G(y) ∈ S
 A x + D y ≥ b
 x ≥ 0
 ```

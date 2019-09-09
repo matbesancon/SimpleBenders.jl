@@ -30,7 +30,7 @@ end
 @testset "Basic test" begin
     data = test_data()
     f(v) = 2v[1]
-    m = Model(with_optimizer(Cbc.Optimizer))
+    m = Model(with_optimizer(Cbc.Optimizer, LogLevel = 0))
     @variable(m, y[j=1:1] >= 0)
     (m, y, cuts, nopt_cons, nfeas_cons) = SimpleBenders.benders_optimize!(m, y, data, () -> Clp.Optimizer(LogLevel = 0), f)
     (xref, yref, objref) = test_result()

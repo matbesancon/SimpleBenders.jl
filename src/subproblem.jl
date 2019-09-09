@@ -1,12 +1,14 @@
 
 """
-Data structure regrouping the information for a Benders subproblem
+Data structure grouping the information for a Benders subproblem.
 """
-struct SubProblemData
-    b::Vector{Float64}
-    D::Matrix{Float64}
-    A::Matrix{Float64}
-    c::Vector{Float64}
+struct SubProblemData{BT<:AbstractVector, DT<:AbstractMatrix, AT<:AbstractMatrix, CT<:AbstractVector}
+    b::BT
+    D::DT
+    A::AT
+    c::CT
+
+    SubProblemData(b::BT, D::DT, A::AT, c::CT) where {BT, DT, AT, CT} = new{BT, DT, AT, CT}(b, D, A, c)
 end
 
 """
@@ -17,10 +19,12 @@ max (b - Dŷ)ᵀ α
 s.t. Aᵀα ⩽ c
      α ⩾ 0
 """
-struct DualSubProblem
-    data::SubProblemData
+struct DualSubProblem{SPD <: SubProblemData}
+    data::SPD
     α::Vector{VariableRef}
     m::Model
+
+    DualSubProblem(data::SPD, α, m) where {SPD} = new{SPD}(data, α, m)
 end
 
 function DualSubProblem(d::SubProblemData, m::Model)
