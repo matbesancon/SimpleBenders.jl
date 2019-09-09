@@ -17,6 +17,7 @@ min f(y) + <c, x>
 s.t.
 G(x) ∈ S
 A x + D y ≥ b
+x ≥ 0
 ```
 
 The projected-out sub-problem requires data stored in a dedicated structure:
