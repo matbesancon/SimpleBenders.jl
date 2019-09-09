@@ -2,9 +2,13 @@ name = "SimpleBenders"
 uuid = "b3995708-6e75-11e9-263f-69b1eca53229"
 authors = ["Mathieu Besançon <mathieu.besancon@gmail.com>"]
 version = "0.1.0"
+description = "A simple Benders algorithm based on JuMP"
 
 [deps]
 JuMP = "4076af6c-e467-56ae-b986-b466b2749572"
+
+[compat]
+JuMP = "0.19"
 
 [extras]
 Clp = "e2554f3b-3117-50c0-817c-e040a3ddf72d"
