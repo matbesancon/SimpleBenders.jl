@@ -1,6 +1,7 @@
 # SimpleBenders.jl
 
-[![Build Status](https://travis-ci.org/matbesancon/SimpleBenders.jl.svg?branch=master)](https://travis-ci.org/matbesancon/SimpleBenders.jl)
+[![Build Status](https://github.com/matbesancon/SimpleBenders.jl/workflows/CI/badge.svg)](https://github.com/matbesancon/SimpleBenders.jl/actions)
+[![Coverage](https://codecov.io/gh/matbesancon/SimpleBenders.jl/branch/master/graph/badge.svg)](https://codecov.io/gh/matbesancon/SimpleBenders.jl)
 
 A simple implementation of the Benders decomposition method with JuMP.
 
