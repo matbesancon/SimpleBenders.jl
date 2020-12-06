@@ -1,6 +1,6 @@
 
 function benders_optimize!(m::Model, y::Vector{VariableRef}, sd::SubProblemData, sp_optimizer, f::Union{Function,Type}; eta_bound::Real = -1000.0)
-    subproblem = Model(with_optimizer(sp_optimizer))
+    subproblem = Model(sp_optimizer)
     dsp = DualSubProblem(sd, subproblem)
     @variable(m, η >= eta_bound)
     @objective(m, Min, f(y) + η)
