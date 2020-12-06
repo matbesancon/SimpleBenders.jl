@@ -8,6 +8,7 @@ A simple implementation of the Benders decomposition method with JuMP.
 ## Motivation
 
 A good start with this package is the corresponding [blog post](https://matbesancon.github.io/post/2019-05-08-simple-benders/).
+The implementation is far from smart since it uses the matrix form of the subproblem.
 
 ## Usage
 
