@@ -18,7 +18,9 @@ end
 
 function test_result()
     d = test_data()
-    m = Model(with_optimizer(Cbc.Optimizer, LogLevel = 0))
+    m = Model(
+        optimizer_with_attributes(Clp.Optimizer, "LogLevel" => 0)
+    )
     @variable(m, x[1:2] >= 0)
     @variable(m, y[1:1] >= 0)
     @objective(m, Min, d.c'*x + 2y[1])
@@ -30,9 +32,11 @@ end
 @testset "Basic test" begin
     data = test_data()
     f(v) = 2v[1]
-    m = Model(with_optimizer(Cbc.Optimizer))
+    m = Model(
+        optimizer_with_attributes(Clp.Optimizer, "LogLevel" => 0)
+    )
     @variable(m, y[j=1:1] >= 0)
-    (m, y, cuts, nopt_cons, nfeas_cons) = SimpleBenders.benders_optimize!(m, y, data, () -> Clp.Optimizer(LogLevel = 0), f)
+    (m, y, cuts, nopt_cons, nfeas_cons) = SimpleBenders.benders_optimize!(m, y, data, optimizer_with_attributes(Clp.Optimizer, "LogLevel" => 0), f)
     (xref, yref, objref) = test_result()
     @test yref[1] ≈ JuMP.value(y[1])
     @test objref ≈ JuMP.objective_value(m)
