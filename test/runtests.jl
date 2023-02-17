@@ -1,10 +1,9 @@
 using Test
-
-import SimpleBenders
+include("../src/SimpleBenders.jl")
+import .SimpleBenders
 using JuMP
 
-import Clp
-import Cbc
+using Gurobi
 
 # test from http://www.iems.ucf.edu/qzheng/grpmbr/seminar/Yuping_Intro_to_BendersDecomp.pdf
 
@@ -19,7 +18,7 @@ end
 function test_result()
     d = test_data()
     m = Model(
-        optimizer_with_attributes(Clp.Optimizer, "LogLevel" => 0)
+        optimizer_with_attributes(Gurobi.Optimizer, "LogToConsole" => 0)
     )
     @variable(m, x[1:2] >= 0)
     @variable(m, y[1:1] >= 0)
@@ -33,10 +32,10 @@ end
     data = test_data()
     f(v) = 2v[1]
     m = Model(
-        optimizer_with_attributes(Clp.Optimizer, "LogLevel" => 0)
+        optimizer_with_attributes(Gurobi.Optimizer, "LogToConsole" => 0)
     )
     @variable(m, y[j=1:1] >= 0)
-    (m, y, cuts, nopt_cons, nfeas_cons) = SimpleBenders.benders_optimize!(m, y, data, optimizer_with_attributes(Clp.Optimizer, "LogLevel" => 0), f)
+    (m, y, cuts, nopt_cons, nfeas_cons) = SimpleBenders.benders_optimize!(m, y, data, optimizer_with_attributes(Gurobi.Optimizer, "LogToConsole" => 0), f)
     (xref, yref, objref) = test_result()
     @test yref[1] ≈ JuMP.value(y[1])
     @test objref ≈ JuMP.objective_value(m)
