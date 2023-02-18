@@ -43,9 +43,11 @@ function JuMP.optimize!(sp::DualSubProblem, ŷ)
     if st == MOI.OPTIMAL
         α = JuMP.value.(sp.α)
         return (:OptimalityCut, α)
-    elseif st == MOI.DUAL_INFEASIBLE
+    elseif (st == MOI.DUAL_INFEASIBLE) || (st==MOI.INFEASIBLE_OR_UNBOUNDED)
+        # retrieve extreme ray
+        α = MOI.get.(sp.m, MOI.VariablePrimal(), sp.α)
         return (:FeasibilityCut, α)
     else
-        error("DualSubProblem error: status $status")
+        error("DualSubProblem error: status $st")
     end
 end

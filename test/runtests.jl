@@ -1,12 +1,11 @@
 using Test
-include("../src/SimpleBenders.jl")
-import .SimpleBenders
+import SimpleBenders
 using JuMP
 
-using Gurobi
+using HiGHS
 using LinearAlgebra
 
-
+solver = optimizer_with_attributes(HiGHS.Optimizer, "log_to_console" => false)
 
 # test from http://www.iems.ucf.edu/qzheng/grpmbr/seminar/Yuping_Intro_to_BendersDecomp.pdf
 
@@ -20,9 +19,7 @@ end
 
 function test_result()
     d = test_data()
-    m = Model(
-        optimizer_with_attributes(Gurobi.Optimizer, "LogToConsole" => 0)
-    )
+    m = Model(solver)
     @variable(m, x[1:2] >= 0)
     @variable(m, y[1:1] >= 0)
     @objective(m, Min, d.c'*x + 2y[1])
@@ -42,9 +39,7 @@ end
 
 function test2_result()
     d = test2_data()
-    m = Model(
-        optimizer_with_attributes(Gurobi.Optimizer, "LogToConsole" => 0)
-    )
+    m = Model(solver)
     @variable(m, x[1:3] >= 0)
     @variable(m, y[1:2] >= 0)
     @objective(m, Min, d.c'*x + 3y[1] - 3y[2])
@@ -56,11 +51,9 @@ end
 @testset "Basic test" begin
     data = test_data()
     f(v) = 2v[1]
-    m = Model(
-        optimizer_with_attributes(Gurobi.Optimizer, "LogToConsole" => 0)
-    )
+    m = Model(solver)
     @variable(m, y[j=1:1] >= 0)
-    (m, y, cuts, nopt_cons, nfeas_cons) = SimpleBenders.benders_optimize!(m, y, data, optimizer_with_attributes(Gurobi.Optimizer, "LogToConsole" => 0), f)
+    (m, y, cuts, nopt_cons, nfeas_cons) = SimpleBenders.benders_optimize!(m, y, data, solver, f)
     (xref, yref, objref) = test_result()
     @test yref[1] ≈ JuMP.value(y[1])
     @test objref ≈ JuMP.objective_value(m)
@@ -70,11 +63,9 @@ end
     (xref, yref, objref) = test2_result()
     data = test2_data()
     f(v) = 3v[1] - 3v[2]
-    m = Model(
-        optimizer_with_attributes(Gurobi.Optimizer, "LogToConsole" => 0)
-    )
+    m = Model(solver)
     @variable(m, 0<=y[j=1:2]<=3)
-    (m, y, cuts, nopt_cons, nfeas_cons) = SimpleBenders.benders_optimize!(m, y, data, optimizer_with_attributes(Gurobi.Optimizer, "LogToConsole" => 0), f)
+    (m, y, cuts, nopt_cons, nfeas_cons) = SimpleBenders.benders_optimize!(m, y, data, solver, f)
     
     @test yref[1] ≈ JuMP.value(y[1])
     @test yref[2] ≈ JuMP.value(y[2])
